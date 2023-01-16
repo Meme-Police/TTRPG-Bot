@@ -1,14 +1,39 @@
 import discord
-import asyncio
+from discord.ext import commands
+import re
+import dice
+
+intents = discord.Intents.default()
 
 token = open("token.txt").read()
 
-client = discord.Client()
+bot = commands.Bot(command_prefix='|', intents = intents)
 
-@client.event
+
+@bot.event
 async def on_ready():
-    print("Logged in as {0.user}".format(client))
-    channels = client.get_all_channels()
-    await list(channels)[2].send("I am here")
+    print("Logged in as {0.user}".format(bot))
+    
 
-asyncio.get_event_loop().run_until_complete(client.run(token))
+@bot.command()
+async def roll(ctx, a: str):
+    try:
+        rolls = re.findall("[0-9]*[dD]{1}[0-9]+", a)
+        print(rolls)
+        results = []
+        numbers = []
+        for die in rolls:
+            die_roll = dice.roll(die)
+            numbers.append(die_roll[0])
+            results.append(die_roll[1])
+            a = a.replace(die, str(results[-1]))
+        print(results)
+        print(a)
+        await ctx.send("Total: " + str(eval(a)) + " Rolls: " + str(numbers))
+    except:
+        await ctx.send("I am dumb and did not understand that.")
+    
+
+        
+    
+bot.run(token)
