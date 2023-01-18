@@ -33,7 +33,4 @@ async def roll(ctx, a: str):
     except:
         await ctx.send("I am dumb and did not understand that.")
     
-
-        
-    
 bot.run(token)
