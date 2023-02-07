@@ -1,10 +1,10 @@
 import unittest
-import dice
+from bot import dice
 
-
-class TestDice(unittest.TestCase):
+class DiceTest(unittest.TestCase):
     def testRoll(self):
         result = dice.make_roll("3d10")
+        print("Test was run {result}")
         self.assertEqual(len(result[0]), 3)
         
 if __name__ == '__main__':

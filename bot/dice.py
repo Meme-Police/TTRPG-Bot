@@ -2,14 +2,15 @@ import random
 import functools
 from discord.ext import commands
 import re
+import logging as log
 
-# This will return a tuple of the individual rolls, as well as the total
+
 class Roll(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.lastMember = None
     
-    # Note to self: All member functions must include self as a parameter.   
+    # Note to self: All member functions of the class must include self as a parameter.   
 
     @commands.command(help = "Rolls a dice")
     async def roll(self, ctx, a: str):
@@ -30,10 +31,10 @@ class Roll(commands.Cog):
             print(a)
             await ctx.send("Total: " + str(eval(a)) + " Rolls: " + str(numbers))
         except Exception as e:
-            print(e)
+            log.error(e)
             await ctx.send("I am dumb and did not understand that.")
         
-            
+# This will return a tuple of the individual rolls, as well as the total            
 def make_roll(string):
     string = string.lower()
     (number, sides) = tuple(string.split('d'))
