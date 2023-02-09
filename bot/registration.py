@@ -21,11 +21,11 @@ class Registrastion(commands.Cog):
         with open(user_path, "w") as out:
             out.write(new_member.toJson())
             out.close
-        ctx.send("You're now registered in the system.")
+        await ctx.send("You're now registered in the system.")
     
     @commands.command()
     async def unregister(self, ctx):
-        ctx.send("Oh yeah this don't do anything yet")
+        await ctx.send("Oh yeah this don't do anything yet")
         
 def format_path(server, user):
     return (f"./servers/{server}/users/{user}.json")
