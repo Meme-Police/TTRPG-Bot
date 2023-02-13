@@ -1,7 +1,11 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands import errors
 import dice
 import registration
+import logging as log
+import player_managment
+import initiative
 
 intents = discord.Intents.default()
 
@@ -16,5 +20,26 @@ async def on_ready():
     # Adding the cogs
     bot.add_cog(dice.Roll(bot))
     bot.add_cog(registration.Registrastion(bot))
+    bot.add_cog(player_managment.PlayerManagment(bot))
+    bot.add_cog(initiative.Initiative(bot))
+    
+
+#This will be called any time there is an error before the command function is run
+@bot.event
+async def on_command_error(ctx, error):
+    log.warning(error.__class__.__name__)
+    if (isinstance(error, discord.ext.commands.errors.MissingRequiredArgument)):
+        await ctx.send(f"Looks like you tried to use a command, but may have forgotten a part of it.\nType '|help {ctx.invoked_with}' for more info.")
+    if (isinstance(error, discord.ext.commands.errors.BadArgument)):
+        await ctx.send(f"The command you just tried to use requires a specific kind of input.\nTry typing '|help {ctx.invoked_with}' to see what kind of input is valid.")
+    if (isinstance(error, discord.ext.commands.errors.CommandNotFound)):
+        # A command not found error can be raised for a number of reasons. 
+        # While it's possible for a user can cause this error by mispelling a command.
+        # It's also possible for another bot on the server to utilize the same command prefix.
+        # In this instance we do not want our bot to reply, even with an error, if a user is trying to use the command of another bot.
+        pass
+    else:
+        log.error(error)
+        await ctx.send(f"I encountered a {ctx.invoked_with} error. I wasn't expecting this and I don't know how to handle it.")
 
 bot.run(token)

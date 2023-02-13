@@ -30,6 +30,9 @@ class Roll(commands.Cog):
             log.info(a)
             await ctx.send("Total: " + str(eval(a)) + " Rolls: " + str(numbers))
         except Exception as e:
+            # TODO: this first log.error is used for debuging purposes as a way to use roll to view arbitrary message content
+            # Remove in the future.
+            log.error(ctx.message.content)
             log.error(e)
             await ctx.send("I am dumb and did not understand that.")
 
