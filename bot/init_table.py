@@ -48,8 +48,14 @@ class Table():
             self.position = self.max_pos
         else:
             self.position -= 1
+        values = self.table.values()
+        # We don't want to display when it's no ones turn
+        if (self.position not in values):
+            return self.next()
         return self._getFromPos()
     def current(self):
+        if (self.position not in self.table.values()):
+            return("")
         return self._getFromPos()
             
     def insert(self, name, pos):
@@ -57,10 +63,10 @@ class Table():
         if (pos > self.max_pos):
             self.max_pos = pos
     def remove(self, name):
-        # We do not care if the item is not present
+        # We do not care if the item is not present so we provide an empty string as the default return value to avoid an error
         self.table.pop(name, '')
         if (bool(self.table) == False):
-            self.max_pos = None
+            self.max_pos = 20
         else:
             values = self.table.values()
             self.max_pos = max(values)

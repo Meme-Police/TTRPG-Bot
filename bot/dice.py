@@ -14,9 +14,10 @@ class Roll(commands.Cog):
     # Note to self: All member functions of the class must include self as a parameter.   
 
     @commands.command(help = roll_help)
-    async def roll(self, ctx, a: str):
+    async def roll(self, ctx, dice_roll: str = "d20"):
+        original_text = dice_roll
         try:
-            rolls = parse_rolls(a)
+            rolls = parse_rolls(dice_roll)
             log.info(rolls)
             results = []
             numbers = []
@@ -25,10 +26,10 @@ class Roll(commands.Cog):
                 die_roll = make_roll(die)
                 numbers.append(die_roll[0])
                 results.append(die_roll[1])
-                a = a.replace(die, str(results[-1]))
+                dice_roll = dice_roll.replace(die, str(results[-1]))
             log.info(results)
-            log.info(a)
-            await ctx.send("Total: " + str(eval(a)) + " Rolls: " + str(numbers))
+            log.info(dice_roll)
+            await ctx.send(f"{original_text}\nTotal: {str(eval(dice_roll))} Rolls: {str(numbers)}")
         except Exception as e:
             # TODO: this first log.error is used for debuging purposes as a way to use roll to view arbitrary message content
             # Remove in the future.
