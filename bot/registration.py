@@ -16,7 +16,7 @@ class Registrastion(commands.Cog):
         if(os.path.exists(user_path)):
             await ctx.send("It looks like I already have you in the system.\nTo wipe your profile, type '|unregister'")
             return
-        new_member = Member(ctx.author.id, 10, 10, [0 for x in range(9)], [0 for x in range(9)])
+        new_member = Member(ctx.author.id, 10, 10, [0 for x in range(9)], [0 for x in range(9)], 0)
         os.makedirs(os.path.dirname(user_path), exist_ok=True)
         with open(user_path, "w") as out:
             out.write(new_member.toJson())

@@ -34,8 +34,6 @@ class Initiative(commands.Cog):
         self.lastMember = None
         
     
-
-        
     @commands.command(help = manual_table_create_help)
     async def manualtablecreate(self, ctx):
         
