@@ -30,9 +30,9 @@ async def on_command_error(ctx, error):
     log.warning(error.__class__.__name__)
     if (isinstance(error, discord.ext.commands.errors.MissingRequiredArgument)):
         await ctx.send(f"Looks like you tried to use a command, but may have forgotten a part of it.\nType '|help {ctx.invoked_with}' for more info.")
-    if (isinstance(error, discord.ext.commands.errors.BadArgument)):
+    elif (isinstance(error, discord.ext.commands.errors.BadArgument)):
         await ctx.send(f"The command you just tried to use requires a specific kind of input.\nTry typing '|help {ctx.invoked_with}' to see what kind of input is valid.")
-    if (isinstance(error, discord.ext.commands.errors.CommandNotFound)):
+    elif (isinstance(error, discord.ext.commands.errors.CommandNotFound)):
         # A command not found error can be raised for a number of reasons. 
         # While it's possible for a user can cause this error by mispelling a command.
         # It's also possible for another bot on the server to utilize the same command prefix.
