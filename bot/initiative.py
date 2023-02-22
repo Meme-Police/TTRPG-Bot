@@ -50,12 +50,12 @@ class Initiative(commands.Cog):
             await ctx.send("I ran into an error.\nThis command is not used to reset the table, but rather to initialize it if it doesn't already exist.\nThis command should never need to be called. If it does need to be called, it should only need to be called once.")
     
     @commands.command(help = init_help)
-    async def addinit(self, ctx, initiative: int, name: str = "-1"):
+    async def addinit(self, ctx, initiative: int, *, name: str = "self"):
         if (initiative < 1):
             await ctx.send("You're so slow the table can't keep track of you.")
             return
         ent_name = name
-        if (ent_name == "-1"):
+        if (ent_name == "self"):
             ent_name = ctx.author.display_name
         log.debug(ent_name)
         init_path = format_path(ctx.guild.id)
@@ -73,9 +73,9 @@ class Initiative(commands.Cog):
     
     
     @commands.command(help = removeinit_help)
-    async def removeinit(self, ctx, name: str = "-1"):
+    async def removeinit(self, ctx, *, name: str = "self"):
         ent_name = name
-        if (ent_name == "-1"):
+        if (ent_name == "self"):
             ent_name = ctx.author.display_name
         log.debug(ent_name)
         init_path = format_path(ctx.guild.id)
