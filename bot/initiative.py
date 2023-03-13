@@ -6,8 +6,11 @@ import init_table
 # TODO: Write initiative help
 init_help = '''Add entity to initiative table.
 Providing the initiative is required.
-This number may not be negative.
-Providing a name is optional. If no name is provided, your server nickname will be used'''
+<initiative> This must be a number and may not be negative.
+<name> Providing a name is optional. If no name is provided, your server nickname will be used
+Examples:
+            |addinit 17
+            |addinit @Paperclip 33'''
 
 manual_table_create_help = '''A one time command to create the initiave table file for your server.
 The bot keeps track of initiative using a text file.
@@ -15,8 +18,11 @@ The bot should have automatically created this file when it joined your server.
 If it did not, then you will need to call this command.'''
 
 removeinit_help = '''Remove entity from initiative table.
-Providing a name is not required.
+<name> Providing a name is not required.
 Not providing a name will remove yourself from the initiative table.
+Examples:
+            |removeinit
+            |removeinit @Paperclip
 '''
 displayinit_help = '''Displays the initiative table'''
 

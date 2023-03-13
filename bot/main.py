@@ -7,6 +7,7 @@ import logging as log
 import player_managment
 import initiative
 import encounter
+import shop
 
 intents = discord.Intents.default()
 
@@ -24,6 +25,7 @@ async def on_ready():
     bot.add_cog(player_managment.PlayerManagment(bot))
     bot.add_cog(initiative.Initiative(bot))
     bot.add_cog(encounter.Encounter(bot))
+    bot.add_cog(shop.Shop(bot))
     
 
 #This will be called any time there is an error before the command function is run
