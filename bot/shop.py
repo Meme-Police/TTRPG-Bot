@@ -35,6 +35,7 @@ You must be the creator of the shop to show it.
 <table_name> The name of the shop
 Example:
             |showshop LabyrinthShop'''
+
             
             
 
@@ -44,7 +45,7 @@ class Shop(commands.Cog):
         self.lastMember = None
         
 # TODO: Write help text
-    @commands.command(help = "")
+    @commands.command(help = createtable_help)
     async def createshop(self, ctx, table_name: str):
         path = format_path(ctx.guild.id, table_name)
         if (os.path.exists(path)):
@@ -55,7 +56,7 @@ class Shop(commands.Cog):
         f.close()
         await ctx.send(f"Shop {table_name} created.")
     
-    @commands.command(help = "")
+    @commands.command(help = deletetable_help)
     async def deleteshop(self, ctx, table_name: str):
         path = format_path(ctx.guild.id, table_name)
         if (os.path.exists(path) == False):
@@ -71,7 +72,7 @@ class Shop(commands.Cog):
             await ctx.send("It looks like you don't own that shop.\nYou can't delete a table unless you own it.")
             
     # TODO: Create item
-    @commands.command(help = "")
+    @commands.command(help = addencounter_help)
     async def addshopitem(self, ctx, shop_name: str, item_name: str, item_price: str, *, description: str):
         path = format_path(ctx.guild.id, shop_name)
         if (os.path.exists(path) == False):
@@ -90,6 +91,7 @@ class Shop(commands.Cog):
             await ctx.send("You are not the owner of that shop.")
     
     # TODO: Remove item
+    @commands.command(help = deleteencounter_help)
     async def deleteitem(self, ctx, table_name: str, item_number: int):
         path = format_path(ctx.guild.id, table_name)
         if (os.path.exists(path) == False):
@@ -107,7 +109,7 @@ class Shop(commands.Cog):
         else:
             await ctx.send("You are not the owner of that table.")
     
-    @commands.command(help = "")
+    @commands.command(help = showtable_help)
     async def showshop(self, ctx, table_name: str):
         path = format_path(ctx.guild.id, table_name)
         if (os.path.exists(path) == False):
@@ -121,7 +123,7 @@ class Shop(commands.Cog):
         else:
             await ctx.send("You are not the owner of that table.")
     
-    @commands.command(help = "")
+    @commands.command(help = "Shows all shops you have created")
     async def allshops(self, ctx):
         path = (f"./servers/{ctx.guild.id}/shops/")
         shops = os.listdir(path)

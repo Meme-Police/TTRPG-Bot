@@ -8,6 +8,9 @@ import player_managment
 import initiative
 import encounter
 import shop
+import os
+import json
+import encyclopedia
 
 intents = discord.Intents.default()
 
@@ -26,6 +29,7 @@ async def on_ready():
     bot.add_cog(initiative.Initiative(bot))
     bot.add_cog(encounter.Encounter(bot))
     bot.add_cog(shop.Shop(bot))
+    bot.add_cog(encyclopedia.Encyclopedia(bot))
     
 
 #This will be called any time there is an error before the command function is run
@@ -45,5 +49,17 @@ async def on_command_error(ctx, error):
     else:
         log.error(error)
         await ctx.send(f"I encountered a {ctx.invoked_with} error. I wasn't expecting this and I don't know how to handle it.")
+        
+@bot.event
+async def on_guild_join(guild):
+    os.makedirs(os.path.dirname(f"./servers/{guild.id}/users/"), exist_ok=True)
+    os.makedirs(os.path.dirname(f"./servers/{guild.id}/encounter_tables/"), exist_ok=True)
+    os.makedirs(os.path.dirname(f"./servers/{guild.id}/shops/"), exist_ok=True)
+    f = open(f"./servers/{guild.id}/initiative.json", "w")
+    f.write(initiative.init_table.Table().toJson())
+    f.close()
+    f = open(f"./servers/{guild.id}/encyclopedia.json", "w")
+    f.write(json.dumps(dict()))
+    f.close()
 
 bot.run(token)
