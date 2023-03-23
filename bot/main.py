@@ -11,6 +11,8 @@ import shop
 import os
 import json
 import encyclopedia
+import poll
+import game_scheduler
 
 intents = discord.Intents.default()
 
@@ -30,6 +32,8 @@ async def on_ready():
     bot.add_cog(encounter.Encounter(bot))
     bot.add_cog(shop.Shop(bot))
     bot.add_cog(encyclopedia.Encyclopedia(bot))
+    bot.add_cog(poll.Poll(bot))
+    bot.add_cog(game_scheduler.GameScheduler(bot))
     
 
 #This will be called any time there is an error before the command function is run
