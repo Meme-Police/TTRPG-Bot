@@ -8,22 +8,27 @@ import time
 no_argument_list = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "day", "days", "week", "weeks", "seconds"]
 has_argument_list = ["at", "every"]
 
-def real_pop(list, n):
-    for x in range(n):
-        list.pop()
-    return
+help_string = '''Schedules a notification.
+Use this command to set a notification for your server. After using the command you will recieve a DM from the bot asking for the name and text of the notification 
+After the command name, write in english when you would like your notification to be sent.
+Valid words include:
+["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "day", "days", "week", "weeks"]
+["at", "every"]
+you may include a number after the word every (every 2 weeks, every friday), 
+and you must include a timecode after the word at (at HH:MM, HH:MM:SS)
+Invalid combinations will return an error.
+Examples:
+            |makereminder every monday at 16:30
+            |makereminder thursday at 07:00:00
+            |makereminder every 2 weeks'''
+
+remove_help = '''Remove a notification by name.
+You can veiw all notifications by typing |viewreminders
+<reminder_name> The name of the reminder.
+Examples:
+            |removereminder MyReminder'''
 
 def schedule_string_builder(job, string_list):
-    #if job == None:
-       #if time_string in no_argument_list:
-            #return getattr(schedule, time_string)
-        #elif time_string in has_argument_list:
-            #return getattr(schedule, time_string)(extra)
-    #else:
-        #if time_string in no_argument_list:
-            #return getattr(job, time_string)
-        #elif time_string in has_argument_list:
-            #return getattr(job, time_string)(extra)
     
     # For daily jobs -> `HH:MM:SS` or `HH:MM`
     if string_list == []:
@@ -46,29 +51,34 @@ class GameScheduler(commands.Cog):
         self.bot = bot
         self.lastMember = None
     
-    @commands.command(help = "")
+    @commands.command(help = help_string)
     async def makereminder(self, ctx, *, time: str):
         args = time.split(" ")
         args.reverse()
         
-        # Surround with try catch
-        job = schedule_string_builder(None, args)
-        
-        dmChannel = await ctx.message.author.create_dm()
-        def check(msg):
-            return msg.author == ctx.author and msg.channel == dmChannel
-        
-        await ctx.author.send("Please enter a name for the reminder,\nThis will be used to help manage your reminders.")
-        msg = await self.bot.wait_for("message", check = check, timeout = 90)
-        first_word = msg.content.split(" ")[0]
-        job = job.tag(first_word, str(str(ctx.guild.id)+first_word), str(ctx.guild.id))
-        def _task():
-            asyncio.run_coroutine_threadsafe(ctx.send("This is the message"), self.bot.loop)
-        job.do(functools.partial(_task))
-
+        try:
+            # Surround with try catch
+            job = schedule_string_builder(None, args)
+            
+            dmChannel = await ctx.message.author.create_dm()
+            def check(msg):
+                return msg.author == ctx.author and msg.channel == dmChannel
+            
+            await ctx.author.send("Please enter a name for the reminder,\nThis will be used to help manage your reminders.")
+            msg = await self.bot.wait_for("message", check = check, timeout = 90)
+            first_word = msg.content.split(" ")[0]
+            await ctx.author.send("Please enter the text for the reminder")
+            msg = await self.bot.wait_for("message", check = check, timeout = 90)
+            
+            job = job.tag(first_word, str(str(ctx.guild.id)+first_word), str(ctx.guild.id))
+            def _task():
+                asyncio.run_coroutine_threadsafe(ctx.send(msg.content), self.bot.loop)
+            job.do(functools.partial(_task))
+        except Exception as e:
+            await ctx.send("There was probably an error with the way you formated your message.")
         print(schedule.get_jobs())
     
-    @commands.command(help = "")
+    @commands.command(help = "Displays all server reminders")
     async def viewreminders(self, ctx):
         jobs = schedule.get_jobs(str(ctx.guild.id))
         display_string = "```"
